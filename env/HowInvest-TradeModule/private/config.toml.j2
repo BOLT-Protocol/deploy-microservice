@@ -1,0 +1,21 @@
+[microservice]
+keystone = "http://{{ bolt_microservice_ip }}:5999"
+keychain = "http://{{ bolt_microservice_ip }}:5566"
+trust = "http://{{ bolt_microservice_ip }}:5567"
+authModule = "http://{{ howinvest_microservice_ip }}:5669"
+currency = "http://{{ bolt_microservice_ip }}:3333"
+tradeModule = "http://{{ howinvest_microservice_ip }}:5668"
+
+
+[opAccount]
+userID = "opAccount"
+password = "{{ opAccountPassword }}"
+
+[receptionDesk]
+userID = "receptionDesk"
+password = "{{ receptionDeskPassword }}"
+
+[fundManagement]
+userID = "fundManagement"
+password = "{{ fundManagementPassword }}"
+HOWHOWSymbol = "{{ HOWHOWSymbol }}"

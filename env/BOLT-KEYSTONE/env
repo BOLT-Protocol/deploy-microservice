@@ -1,0 +1,7 @@
+let env = {
+  signerKey: 'ASDFGTREWAS',
+  lifeTime: '86400',
+  keyChainUrl: 'http://127.0.0.1:5566'
+};
+
+module.exports = env;

@@ -1,0 +1,12 @@
+[authModule]
+userID = "authModule"
+password = "{{ authModulePassword }}"
+microserviceAccountList = ["fundManagementAddress", "receptionDeskAddress"]
+
+[microservice]
+keystone = "http://{{ bolt_microservice_ip }}:5999"
+keychain = "http://{{ bolt_microservice_ip }}:5566"
+trust = "http://{{ bolt_microservice_ip }}:5567"
+authModule = "http://{{ howinvest_microservice_ip }}:5669"
+tradeModule = "http://{{ howinvest_microservice_ip }}:5668"
+blacklist = "http://{{ howinvest_microservice_ip }}:5570"

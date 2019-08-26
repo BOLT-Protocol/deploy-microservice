@@ -1,0 +1,53 @@
+---
+- hosts: server
+  name: start chain
+  sudo: yes
+  tasks:
+    - name: start privateChain
+      shell: "(cd privateChain/; nohup sh start.sh >/dev/null 2>&1 &)"
+
+- hosts: server
+  name: start services
+  tasks:
+    - name: start gringotts
+      shell: /usr/local/lib/npm/bin/pm2 start server.js -n gringotts
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/gringotts
+    - name: start BOLT-CURRENCY
+      shell: /usr/local/lib/npm/bin/pm2 start . -n BOLT-CURRENCY
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/BOLT-CURRENCY
+    - name: start BOLT-KEYCHAIN
+      shell: /usr/local/lib/npm/bin/pm2 start . -n BOLT-KEYCHAIN
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/BOLT-KEYCHAIN
+    - name: start BOLT-KEYSTONE
+      shell: /usr/local/lib/npm/bin/pm2 start . -n BOLT-KEYSTONE
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/BOLT-KEYSTONE
+    - name: start BOLT-TRUST
+      shell: /usr/local/lib/npm/bin/pm2 start . -n BOLT-TRUST
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/BOLT-TRUST
+    - name: start HowinvestMockAPI
+      shell: /usr/local/lib/npm/bin/pm2 start . -n HowinvestMockAPI
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/HowinvestMockAPI
+    - name: start HowInvest-ReceptionDesk
+      shell: /usr/local/lib/npm/bin/pm2 start . -n HowInvest-ReceptionDesk
+      ignore_errors: true
+      args:
+        chdir: /home/ubuntu/HowInvest-ReceptionDesk
+
+
+
+
+
+
+

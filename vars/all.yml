@@ -1,0 +1,15 @@
+# ssh 登入的 user name
+agent_user: ubuntu
+bolt_main_ip: 192.168.2.15
+bolt_microservice_ip: 192.168.2.5
+howinvest_microservice_ip: 192.168.2.20
+
+authModulePassword: "P@ssw0rdHksNZX"
+opAccountPassword: "P@ssw0rdHksNZX"
+receptionDeskPassword: "P@ssw0rdHksNZX"
+fundManagementPassword: "P@ssw0rdHksNZX"
+# HOWHOW 幣代號
+HOWHOWSymbol: "HOWHOW"
+
+postgresUser: "howhow"
+postgresPassword: "DRFnNN67"

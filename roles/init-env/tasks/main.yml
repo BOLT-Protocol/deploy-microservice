@@ -1,0 +1,34 @@
+---
+- name: Check if git is already installed
+  command: git --version
+  ignore_errors: true
+  changed_when: false
+  register: git_is_installed
+- name: Install git
+  sudo: yes
+  apt:
+    name: git
+    update_cache: yes
+  when: git_is_installed.rc != 0
+- name: Install env
+  sudo: yes
+  apt:
+    name: ['g++', 'make']
+    update_cache: yes
+- name: mkdir .ssh
+  command: "mkdir .ssh"
+  ignore_errors: true
+- name: cp pk to the server.
+  copy:
+    src: "./keys/id_rsa"
+    dest: ".ssh/github_rsa"
+    mode: 0600
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: cp ssh config.
+  copy:
+    src: "./keys/config"
+    dest: ".ssh/config"
+    mode: 0600
+    owner: "{{ user }}"
+    group: "{{ user }}"

@@ -1,0 +1,23 @@
+# CafecaBackend Default Config
+
+title = "HowinvestMockAPI"
+
+[base]
+folder = "MerMer-framework"
+static = "./build/frontend/"
+debug = true
+
+[blockchain]
+type = "ethereum"
+
+[database]
+type = "firebase"
+
+[microservice]
+keystone = "http://{{ bolt_microservice_ip }}:5999"
+keychain = "http://{{ bolt_microservice_ip }}:5566"
+trust = "http://{{ bolt_microservice_ip }}:5567"
+currency = "http://{{ bolt_microservice_ip }}:3333"
+authModule = "http://{{ howinvest_microservice_ip }}:5669"
+tradeModule = "http://{{ howinvest_microservice_ip }}:5668"
+blacklist = "http://{{ howinvest_microservice_ip }}:5570"
