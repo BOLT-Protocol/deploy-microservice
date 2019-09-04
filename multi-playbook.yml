@@ -342,3 +342,13 @@
       ignore_errors: true
       args:
         chdir: "HowInvest-Blacklist"
+
+- hosts: multi
+  sudo: yes
+  vars_files: vars/all.yml
+  tasks:
+    - name: Change ~/.ssh, group and permissions
+      file:
+        path: "/home/{{ agent_user }}/.ssh"
+        owner: ubuntu
+        group: ubuntu

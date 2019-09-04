@@ -7,6 +7,6 @@ bolt_main ansible_ssh_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansi
 server ansible_ssh_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/server/virtualbox/private_key
 
 [multi]
-bolt_main ansible_ssh_host=192.168.2.15 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu
-bolt_microservice ansible_ssh_host=192.168.2.5 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu
-howinvest_microservice ansible_ssh_host=192.168.2.20 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu
+bolt_main ansible_ssh_host=192.168.2.20 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu
+bolt_microservice ansible_ssh_host=192.168.2.11 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu
+howinvest_microservice ansible_ssh_host=192.168.2.14 ansible_port=22 ansible_user=ubuntu ansible_password=ubuntu ansible_sudo_pass=ubuntu

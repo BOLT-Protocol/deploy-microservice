@@ -41,11 +41,16 @@ authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"
 receptionDeskPassword: "P@ssw0rdHksNZX"
 fundManagementPassword: "P@ssw0rdHksNZX"
-# HOWHOW 幣代號
+# HOWHOW 幣代號(之後建立得好好幣別稱)
 HOWHOWSymbol: "HOWHOW"
 
+# postgres 帳密
 postgresUser: "howhow"
 postgresPassword: "DRFnNN67"
+
+ssh_known_hosts_file: /home/{{ agent_user }}/.ssh/known_hosts
+ssh_known_hosts_command: "ssh-keyscan -H -T 10"
+ssh_known_hosts: github.com
 ```
 
 ### Step 3
