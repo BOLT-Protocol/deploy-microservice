@@ -39,17 +39,17 @@
 - hosts: bolt_microservice
   name: clone project
   tasks:
-    - name: pull repo
-      ignore_errors: true
-      git:
-        repo: "{{ item.repo }}"
-        dest: "{{ item.name }}"
-        accept_hostkey: yes
-        version: develop
-      with_items:
-        - { repo: git@github.com:VagrantPi/privateChain.git, name: privateChain }
-        - { repo: git@github.com:BOLT-Protocol/gringotts.git, name: gringotts }
-        - { repo: git@github.com:BOLT-Protocol/contracts.git, name: contracts }
+    # - name: pull repo
+    #   ignore_errors: true
+    #   git:
+    #     repo: "{{ item.repo }}"
+    #     dest: "{{ item.name }}"
+    #     accept_hostkey: yes
+    #     version: develop
+    #   with_items:
+    #     - { repo: git@github.com:VagrantPi/privateChain.git, name: privateChain }
+    #     - { repo: git@github.com:BOLT-Protocol/gringotts.git, name: gringotts }
+    #     - { repo: git@github.com:BOLT-Protocol/contracts.git, name: contracts }
     - name: pull repo
       ignore_errors: true
       git:
@@ -78,38 +78,38 @@
         - { repo: git@github.com:BOLT-Protocol/HowInvest-TradeModule.git, name: HowInvest-TradeModule }
         - { repo: git@github.com:BOLT-Protocol/HowInvest-Blacklist.git, name: HowInvest-Blacklist }
 
-- hosts: bolt_microservice
-  name: set chain
-  sudo: yes
-  tasks:
-    - name: add ethereum repo
-      apt_repository:
-        repo: ppa:ethereum/ethereum
-    - name: install ethereum
-      apt:
-        name: "{{ packages }}"
-  vars:
-    - packages:
-      - software-properties-common
-      - ethereum
+# - hosts: bolt_microservice
+#   name: set chain
+#   sudo: yes
+#   tasks:
+#     - name: add ethereum repo
+#       apt_repository:
+#         repo: ppa:ethereum/ethereum
+#     - name: install ethereum
+#       apt:
+#         name: "{{ packages }}"
+#   vars:
+#     - packages:
+#       - software-properties-common
+#       - ethereum
 
-- hosts: bolt_microservice
-  name: start chain
-  vars_files: vars/all.yml
-  tasks:
-    - name: reset config
-      shell:
-        sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/reset.sh;
-        sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/start.sh;
-      ignore_errors: true
-    - name: reset privateChain
-      command: sh reset.sh
-      args:
-        chdir: privateChain/
-    - name: start privateChain
-      shell: "(cd privateChain/; nohup sh start.sh >/dev/null 2>&1 &)"
-  vars:
-    - home_path: "/home/{{ agent_user }}"
+# - hosts: bolt_microservice
+#   name: start chain
+#   vars_files: vars/all.yml
+#   tasks:
+#     - name: reset config
+#       shell:
+#         sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/reset.sh;
+#         sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/start.sh;
+#       ignore_errors: true
+#     - name: reset privateChain
+#       command: sh reset.sh
+#       args:
+#         chdir: privateChain/
+#     - name: start privateChain
+#       shell: "(cd privateChain/; nohup sh start.sh >/dev/null 2>&1 &)"
+#   vars:
+#     - home_path: "/home/{{ agent_user }}"
 
 - hosts: bolt_microservice
   name: init DB
@@ -152,8 +152,8 @@
       npm:
         path: "{{ item }}"
       with_items:
-        - "contracts"
-        - "gringotts"
+        # - "contracts"
+        # - "gringotts"
         - "BOLT-KEYSTONE"
         - "BOLT-KEYCHAIN"
         - "BOLT-TRUST"
@@ -163,17 +163,20 @@
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
       with_items:
-        - { src: ./script/deployContract.sh, dest: "contracts/deployContract.sh" } 
-        - { src: ./env/contracts/env.js, dest: "contracts/env.js" } 
-        - { src: ./env/gringotts/env.js, dest: "gringotts/env.js" } 
-        - { src: ./env/BOLT-CURRENCY/env.js, dest: "BOLT-CURRENCY/env.js" } 
-        - { src: ./env/BOLT-KEYCHAIN/env.js, dest: "BOLT-KEYCHAIN/env.js" } 
+    #     - { src: ./script/deployContract.sh, dest: "contracts/deployContract.sh" } 
+    #     - { src: ./env/contracts/env.js, dest: "contracts/env.js" } 
+    #     - { src: ./env/BOLT-CURRENCY/env.js, dest: "BOLT-CURRENCY/env.js" } 
+    #     - { src: ./env/BOLT-KEYCHAIN/env.js, dest: "BOLT-KEYCHAIN/env.js" } 
         - { src: ./env/BOLT-KEYSTONE/env, dest: "BOLT-KEYSTONE/env" } 
-        - { src: ./env/BOLT-TRUST/env.js, dest: "BOLT-TRUST/env.js" }
-    - name: truffle deploy
-      command: sh deployContract.sh
-      args:
-        chdir: "contracts"
+    #     - { src: ./env/BOLT-TRUST/env.js, dest: "BOLT-TRUST/env.js" }
+    # - name: generation the gringotts env
+    #   template:
+    #     src: env/gringotts/env.js.j2
+    #     dest: gringotts/env.js
+    # - name: truffle deploy
+    #   command: sh deployContract.sh
+    #   args:
+    #     chdir: "contracts"
     - name: migrate gringotts
       shell: NODE_ENV=production ./node_modules/.bin/sequelize db:migrate --config env.js --migrations-path ./storage-manager/migrations --models-path ./storage-manager/models
       ignore_errors: true
@@ -184,11 +187,19 @@
       ignore_errors: true
       args:
         chdir: "gringotts"
+    - name: generation the BOLT-CURRENCY env
+      template:
+        src: env/BOLT-CURRENCY/env.js.j2
+        dest: BOLT-CURRENCY/env.js
     - name: start migrate
       command: /usr/local/lib/npm/bin/pm2 start . -n BOLT-CURRENCY
       ignore_errors: true
       args:
         chdir: "BOLT-CURRENCY"
+    - name: generation the BOLT-KEYCHAIN env
+      template:
+        src: env/BOLT-KEYCHAIN/env.js.j2
+        dest: BOLT-KEYCHAIN/env.js
     - name: start BOLT-KEYCHAIN
       command: /usr/local/lib/npm/bin/pm2 start . -n BOLT-KEYCHAIN
       ignore_errors: true
@@ -199,6 +210,10 @@
       ignore_errors: true
       args:
         chdir: "BOLT-KEYSTONE"
+    - name: generation the BOLT-TRUST env
+      template:
+        src: env/BOLT-TRUST/env.js.j2
+        dest: BOLT-TRUST/env.js
     - name: migrate BOLT-TRUST
       shell: NODE_ENV=development ./node_modules/.bin/sequelize db:migrate --config env.js --migrations-path ./src/database/migrations --models-path ./src/database/models
       ignore_errors: true

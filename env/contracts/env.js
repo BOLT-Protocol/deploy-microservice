@@ -1,16 +1,18 @@
 let env = {
   devnet: {
-  web3Url: 'http://127.0.0.1:8545',
-  privateKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
-},
-testnet: {
-  web3Url: 'https://rinkeby.infura.io',
-  privateKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
-},
-mainnet: {
-  web3Url: 'https://mainnet.infura.io',
-  privateKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
-}
+    web3Url: 'http://18.140.67.139:8545',
+    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
+  },
+  testnet: {
+    web3Url: 'https://rinkeby.infura.io',
+    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
+  },
+  mainnet: {
+    web3Url: 'https://mainnet.infura.io',
+    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
+  }
 };
+
+module.exports = env;
 
 module.exports = env;

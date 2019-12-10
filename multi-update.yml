@@ -13,71 +13,71 @@
       shell: "{{ ssh_known_hosts_command}} {{ ssh_known_hosts }} >> {{ ssh_known_hosts_file }}"
       when: ssh_known_host_results.stdout == ""
 
-# - hosts: bolt_main
-#   name: update bolt_microservice
-#   vars_files: vars/all.yml
-#   tasks:
-#     - name: "update microservice"
-#       ignore_errors: true
-#       shell: "git checkout develop && git fetch --all -p && git checkout . && git pull"
-#       args:
-#         chdir: "{{ item.path }}"
-#       with_items:
-#         - { path: "Howinvest-APIGateway" }
-#         - { path: "BOLT-AUTOMATION" }
-#     - name: Install packages based on package.json.
-#       npm:
-#         path: "{{ item }}"
-#       with_items:
-#         - "Howinvest-APIGateway"
-#         - "BOLT-AUTOMATION"
-#     - name: restart all service
-#       command: /usr/local/lib/npm/bin/pm2 restart all
+- hosts: bolt_main
+  name: update bolt_microservice
+  vars_files: vars/all.yml
+  tasks:
+    - name: "update microservice"
+      ignore_errors: true
+      shell: "git checkout prerelease-v0.1.0 && git fetch --all -p && git checkout . && git pull"
+      args:
+        chdir: "{{ item.path }}"
+      with_items:
+        - { path: "Howinvest-APIGateway" }
+        - { path: "BOLT-AUTOMATION" }
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "Howinvest-APIGateway"
+        - "BOLT-AUTOMATION"
+    - name: restart all service
+      command: /usr/local/lib/npm/bin/pm2 restart all
 
-# - hosts: bolt_microservice
-#   name: update bolt_microservice
-#   tasks:
-#     - name: "update microservice"
-#       ignore_errors: true
-#       shell: "git checkout develop && git fetch --all -p && git checkout . && git pull"
-#       args:
-#         chdir: "{{ item.path }}"
-#       with_items:
-#         - { path: "gringotts" }
-#         - { path: "BOLT-KEYSTONE" }
-#         - { path: "BOLT-KEYCHAIN" }
-#         - { path: "BOLT-TRUST" }
-#         - { path: "BOLT-CURRENCY" }
-#     - name: Install packages based on package.json.
-#       npm:
-#         path: "{{ item }}"
-#       with_items:
-#         - "gringotts"
-#         - "BOLT-KEYSTONE"
-#         - "BOLT-KEYCHAIN"
-#         - "BOLT-TRUST"
-#         - "BOLT-CURRENCY"
-#     - name: restart all service
-#       command: /usr/local/lib/npm/bin/pm2 restart all
+- hosts: bolt_microservice
+  name: update bolt_microservice
+  tasks:
+    - name: "update microservice"
+      ignore_errors: true
+      shell: "git checkout prerelease-v0.1.0 && git fetch --all -p && git checkout . && git pull"
+      args:
+        chdir: "{{ item.path }}"
+      with_items:
+        - { path: "gringotts" }
+        - { path: "BOLT-KEYSTONE" }
+        - { path: "BOLT-KEYCHAIN" }
+        - { path: "BOLT-TRUST" }
+        - { path: "BOLT-CURRENCY" }
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "gringotts"
+        - "BOLT-KEYSTONE"
+        - "BOLT-KEYCHAIN"
+        - "BOLT-TRUST"
+        - "BOLT-CURRENCY"
+    - name: restart all service
+      command: /usr/local/lib/npm/bin/pm2 restart all
 
-# - hosts: howinvest_microservice
-#   name: update bolt_microservice
-#   tasks:
-#     - name: "update microservice"
-#       ignore_errors: true
-#       shell: "git checkout develop && git fetch --all -p && git checkout . && git pull"
-#       args:
-#         chdir: "{{ item.path }}"
-#       with_items:
-#         - { path: "HowInvest-AuthModule" }
-#         - { path: "HowInvest-Blacklist" }
-#         - { path: "HowInvest-TradeModule" }
-#     - name: Install packages based on package.json.
-#       npm:
-#         path: "{{ item }}"
-#       with_items:
-#         - "HowInvest-AuthModule"
-#         - "HowInvest-Blacklist"
-#         - "HowInvest-TradeModule"
-#     - name: restart all service
-#       command: /usr/local/lib/npm/bin/pm2 restart all
+- hosts: howinvest_microservice
+  name: update bolt_microservice
+  tasks:
+    - name: "update microservice"
+      ignore_errors: true
+      shell: "git checkout prerelease-v0.1.0 && git fetch --all -p && git checkout . && git pull"
+      args:
+        chdir: "{{ item.path }}"
+      with_items:
+        - { path: "HowInvest-AuthModule" }
+        - { path: "HowInvest-Blacklist" }
+        - { path: "HowInvest-TradeModule" }
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "HowInvest-AuthModule"
+        - "HowInvest-Blacklist"
+        - "HowInvest-TradeModule"
+    - name: restart all service
+      command: /usr/local/lib/npm/bin/pm2 restart all
