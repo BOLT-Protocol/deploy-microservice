@@ -16,8 +16,51 @@
 
 ```
 $ cp YOURPATH/id_rsa deploy-microservice/keys/
-$ cp YOURPATH/id_rsa.pub deploy-microservice/keys/
 ```
+
+### Step 2
+
+設定相關設定檔:
+
+- `inventory` 相關設定
+
+  要部署機器的 host, port, ssh key,
+  如果要使用 ssh 密碼登入可以使用 `ansible_password`，另外如果該 user 沒有 sudo 免打密碼，需加上 `ansible_sudo_pass`
+
+- `vars` 相關設定變數
+
+```
+# ssh 登入的 user name
+agent_user: ubuntu
+bolt_main_ip: 192.168.2.20
+bolt_microservice_ip: 192.168.2.62
+howinvest_microservice_ip: 192.168.2.21
+
+authModulePassword: "P@ssw0rdHksNZX"
+opAccountPassword: "P@ssw0rdHksNZX"
+receptionDeskPassword: "P@ssw0rdHksNZX"
+fundManagementPassword: "P@ssw0rdHksNZX"
+# HOWHOW 幣代號(之後建立得好好幣別稱)
+HOWHOWSymbol: "HOWHOW"
+
+# postgres 帳密
+postgresUser: "howhow"
+postgresPassword: "DRFnNN67"
+
+ssh_known_hosts_file: /home/{{ agent_user }}/.ssh/known_hosts
+ssh_known_hosts_command: "ssh-keyscan -H -T 10"
+ssh_known_hosts: github.com
+```
+
+### Step 3
+
+執行 ansible 腳本 step 1
+
+```
+$ ansible-playbook multi-playbook-step1.yml
+```
+
+> 如果 clone 失敗可以手動去更改
 
 ### step 4
 
@@ -206,13 +249,14 @@ $ vim env.js
 以下為 env.js 的設定(可複製 ./env/contracts/env.js 來進行修改使用)
 
 ```javascript
-...
+var argv = require('minimist')(process.argv.slice(2), { string: ['contractAddress'] });
+var operators = require('sequelize').Op;
 
 let env = {
-  web3Url: 'ws://18.140.67.139:8546',   // 測試鏈位置
+  web3Url: 'ws://127.0.0.1:8546',   // 測試鏈位置
   serverUrl: 'http://127.0.0.1:3001',
   serverAddress: '0xd0C9AB4388871c662e95BBD3286B00f2cEDD09CE',
-  contractAddress: '',                  // 貼上剛剛拿到的 Booster 合約地址
+  contractAddress: '0x73BdD6d4612Ca30BA034347Ac00F409508A8547a',                  // 貼上剛剛拿到的 Booster 合約地址
   boosterPort: '3000',
   signerKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
   btcKey:'934waTMCujKrTr3vWyL3EcoemM7y4wWNUKsEvZcrR4185VxQVUW',
@@ -232,55 +276,32 @@ let env = {
   generateEmptyTx: true,
   ipfs: {
     peers: [],
-    repo: '/home/tideops/ipfs'
+    repo: '/home/vagrant/ipfs'
   }
 };
 
-...
+if (!argv.hasOwnProperty('migrations-path')) {
+  Object.keys(env).forEach((key) => {
+    if (key != 'production') {
+      let value = env[key];
+      if (!value && value != false) {
+        throw new Error('Missing config: ' + key);
+      }
+    }
+  });
+}
+
+module.exports = env;
 ```
 
 修改完後可以繼續下面的自動化腳本設定
 
-### Step 3
-
-設定相關設定檔:
-
-- `inventory` 相關設定
-
-  要部署機器的 host, port, ssh key,
-  如果要使用 ssh 密碼登入可以使用 `ansible_password`，另外如果該 user 沒有 sudo 免打密碼，需加上 `ansible_sudo_pass`
-
-- `vars` 相關設定變數
-
-```
-# ssh 登入的 user name
-agent_user: ubuntu
-bolt_main_ip: 192.168.2.20
-bolt_microservice_ip: 192.168.2.62
-howinvest_microservice_ip: 192.168.2.21
-
-authModulePassword: "P@ssw0rdHksNZX"
-opAccountPassword: "P@ssw0rdHksNZX"
-receptionDeskPassword: "P@ssw0rdHksNZX"
-fundManagementPassword: "P@ssw0rdHksNZX"
-# HOWHOW 幣代號(之後建立得好好幣別稱)
-HOWHOWSymbol: "HOWHOW"
-
-# postgres 帳密
-postgresUser: "howhow"
-postgresPassword: "DRFnNN67"
-
-ssh_known_hosts_file: /home/{{ agent_user }}/.ssh/known_hosts
-ssh_known_hosts_command: "ssh-keyscan -H -T 10"
-ssh_known_hosts: github.com
-```
-
 ### Step 4
 
-執行 ansible 腳本
+執行 ansible 腳本 step 2
 
 ```
-$ ansible-playbook multi-playbook.yml
+$ ansible-playbook multi-playbook-step2.yml
 ```
 
 ### 驗證部署成功
