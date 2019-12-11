@@ -35,6 +35,7 @@ agent_user: ubuntu
 bolt_main_ip: 192.168.2.20
 bolt_microservice_ip: 192.168.2.62
 howinvest_microservice_ip: 192.168.2.21
+web3Url: "ws://3.82.172.25:8546"
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"
