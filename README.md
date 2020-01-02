@@ -295,6 +295,12 @@ if (!argv.hasOwnProperty('migrations-path')) {
 module.exports = env;
 ```
 
+執行 db pgmigrate
+
+```
+$ npm run pgmigrate
+```
+
 修改完後可以繼續下面的自動化腳本設定
 
 ### Step 4
