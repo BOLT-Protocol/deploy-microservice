@@ -73,7 +73,7 @@ $ ansible-playbook multi-playbook-step1.yml
 > BOLT使用Truffle專案來管理合約的編譯、部署、升版，故需要先安裝全局的truffle指令，truffle為一個npm套件
 
 ```
-$ npm install -g truffle@4.1.14
+$ npm install -g truffle@5.1.6
 ```
 
 #### clone 合約跟 gringotts 專案
