@@ -1,6 +1,6 @@
 let env = {
   devnet: {
-    web3Url: 'http://18.140.67.139:8545',
+    web3Url: 'http://3.82.172.25:8545',
     privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
   },
   testnet: {
@@ -12,7 +12,5 @@ let env = {
     privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
   }
 };
-
-module.exports = env;
 
 module.exports = env;

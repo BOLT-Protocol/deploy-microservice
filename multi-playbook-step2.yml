@@ -12,16 +12,16 @@
         - "BOLT-KEYCHAIN"
         - "BOLT-TRUST"
         - "BOLT-CURRENCY"
-    - name: cp env file & deploy script
-      copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-      with_items:
+    # - name: cp env file & deploy script
+    #   copy:
+    #     src: "{{ item.src }}"
+    #     dest: "{{ item.dest }}"
+    #   with_items:
     #     - { src: ./script/deployContract.sh, dest: "contracts/deployContract.sh" } 
     #     - { src: ./env/contracts/env.js, dest: "contracts/env.js" } 
     #     - { src: ./env/BOLT-CURRENCY/env.js, dest: "BOLT-CURRENCY/env.js" } 
     #     - { src: ./env/BOLT-KEYCHAIN/env.js, dest: "BOLT-KEYCHAIN/env.js" } 
-        - { src: ./env/BOLT-KEYSTONE/env, dest: "BOLT-KEYSTONE/env" } 
+    #     - { src: ./env/BOLT-KEYSTONE/env, dest: "BOLT-KEYSTONE/env" } 
     #     - { src: ./env/BOLT-TRUST/env.js, dest: "BOLT-TRUST/env.js" }
     # - name: generation the gringotts env
     #   template:
@@ -59,6 +59,10 @@
       ignore_errors: true
       args:
         chdir: "BOLT-KEYCHAIN"
+    - name: generation the BOLT-KEYSTONE env
+      template:
+        src: env/BOLT-KEYSTONE/env.js.j2
+        dest: BOLT-KEYSTONE/env.js
     - name: start BOLT-KEYSTONE
       command: /usr/local/lib/npm/bin/pm2 start . -n BOLT-KEYSTONE
       ignore_errors: true

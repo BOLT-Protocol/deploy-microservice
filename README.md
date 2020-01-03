@@ -27,15 +27,25 @@ $ cp YOURPATH/id_rsa deploy-microservice/keys/
   要部署機器的 host, port, ssh key,
   如果要使用 ssh 密碼登入可以使用 `ansible_password`，另外如果該 user 沒有 sudo 免打密碼，需加上 `ansible_sudo_pass`
 
+  ```
+  [multi]  
+  bolt_main ansible_ssh_host=52.199.189.73 ansible_port=22 ansible_user=tideops ansible_password=tidetidebolt ansible_sudo_pass=tidetidebolt
+  bolt_microservice ansible_ssh_host=13.113.193.7 ansible_port=22 ansible_user=tideops ansible_password=tidetidebolt ansible_sudo_pass=tidetidebolt
+  howinvest_microservice ansible_ssh_host=13.112.250.9 ansible_port=22 ansible_user=tideops ansible_password=tidetidebolt ansible_sudo_pass=tidetidebolt
+  ```
+
 - `vars` 相關設定變數
+
+`# 記得修改各 microservice ip 與 web3Url ip`
 
 ```
 # ssh 登入的 user name
 agent_user: ubuntu
-bolt_main_ip: 192.168.2.20
-bolt_microservice_ip: 192.168.2.62
-howinvest_microservice_ip: 192.168.2.21
-web3Url: "ws://3.82.172.25:8546"
+bolt_main_ip: 192.168.2.20                   # 記得修改
+bolt_microservice_ip: 192.168.2.62           # 記得修改
+howinvest_microservice_ip: 192.168.2.21      # 記得修改
+web3Url: "ws://3.82.172.25:8546"             # 記得修改
+privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202' # 測試鏈錢包 privateKey 記得修改
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"
@@ -99,16 +109,16 @@ $ vim env.js
 ```javascript
 let env = {
   devnet: {
-    web3Url: 'http://18.140.67.139:8545',  // 測試鏈位置
-    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202', // 測試鏈錢包 privateKey
+    web3Url: '',  // 測試鏈位置  記得修改
+    privateKey: '', // 測試鏈錢包 privateKey 記得修改
   },
   testnet: {
-    web3Url: 'https://rinkeby.infura.io',
-    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
+    web3Url: '',
+    privateKey: '',
   },
   mainnet: {
-    web3Url: 'https://mainnet.infura.io',
-    privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202',
+    web3Url: '',
+    privateKey: '',
   }
 };
 
@@ -254,12 +264,12 @@ var argv = require('minimist')(process.argv.slice(2), { string: ['contractAddres
 var operators = require('sequelize').Op;
 
 let env = {
-  web3Url: 'ws://127.0.0.1:8546',   // 測試鏈位置
+  web3Url: '',                          // 測試鏈位置 記得修改
   serverUrl: 'http://127.0.0.1:3001',
   serverAddress: '0xd0C9AB4388871c662e95BBD3286B00f2cEDD09CE',
-  contractAddress: '0x73BdD6d4612Ca30BA034347Ac00F409508A8547a',                  // 貼上剛剛拿到的 Booster 合約地址
+  contractAddress: '',                  // 貼上剛剛拿到的 Booster 合約地址 記得修改
   boosterPort: '3000',
-  signerKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
+  signerKey: '',                        // 測試鏈錢包 privateKey 記得修改
   btcKey:'934waTMCujKrTr3vWyL3EcoemM7y4wWNUKsEvZcrR4185VxQVUW',
   production: {
     username: 'howhow',                 // vars/all.yml 中設定的 postgresUser
@@ -277,7 +287,7 @@ let env = {
   generateEmptyTx: true,
   ipfs: {
     peers: [],
-    repo: '/home/vagrant/ipfs'
+    repo: '/home/vagrant/ipfs'           // ipfs 位置，修改成自己的家目錄
   }
 };
 
@@ -299,6 +309,20 @@ module.exports = env;
 
 ```
 $ npm run pgmigrate
+```
+
+之後可以下指令跑跑看是否成功，成功的話會看到
+
+```
+$ npm start
+App listening on port 3000!
+Gringotts is running on develop mode
+Swarm listening on /ip4/127.0.0.1/tcp/4002/ipfs/QmXPjbkfFFGRNjJ3K3JUsxqvRfmzFCgR7f3GyotqHcjJSc
+Swarm listening on /ip4/172.26.4.101/tcp/4002/ipfs/QmXPjbkfFFGRNjJ3K3JUsxqvRfmzFCgR7f3GyotqHcjJSc
+Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/ipfs/QmXPjbkfFFGRNjJ3K3JUsxqvRfmzFCgR7f3GyotqHcjJSc
+IPFS node server ready.
+expectedStageHeight: 1
+gsn: 0
 ```
 
 修改完後可以繼續下面的自動化腳本設定

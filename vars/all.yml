@@ -3,7 +3,8 @@ agent_user: tideops
 bolt_main_ip: 52.199.189.73
 bolt_microservice_ip: 13.113.193.7
 howinvest_microservice_ip: 3.112.250.9
-web3Url: "ws://3.82.172.25:8546"
+web3Url: ''
+privateKey: '' # 測試鏈錢包 privateKey 記得修改
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"

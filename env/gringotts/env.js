@@ -8,7 +8,7 @@ let env = {
   serverAddress: '0xd0C9AB4388871c662e95BBD3286B00f2cEDD09CE',
   contractAddress: '',
   boosterPort: '3000',
-  signerKey: '76a2c8b0be1eca1f6404ce35fa5f4acbc1ee9dc9768e5da16df40049054aeddf',
+  signerKey: '',
   btcKey:'934waTMCujKrTr3vWyL3EcoemM7y4wWNUKsEvZcrR4185VxQVUW',
   production: {
     username: 'howhow',
