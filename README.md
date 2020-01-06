@@ -49,7 +49,9 @@ $ cp YOURPATH/id_rsa deploy-microservice/keys/
   
   `~/.ssh/config`
   ```
-  Host 34.221.231.26, 34.219.166.100
+  Host 34.221.231.26
+    IdentityFile ~/Downloads/Howinvest.Oregano.pem
+  Host 34.219.166.100
     IdentityFile ~/Downloads/Howinvest.Oregano.pem
   ```
 
