@@ -33,6 +33,21 @@ $ cp YOURPATH/id_rsa deploy-microservice/keys/
   bolt_microservice ansible_ssh_host=13.113.193.7 ansible_port=22 ansible_user=tideops ansible_password=tidetidebolt ansible_sudo_pass=tidetidebolt
   howinvest_microservice ansible_ssh_host=13.112.250.9 ansible_port=22 ansible_user=tideops ansible_password=tidetidebolt ansible_sudo_pass=tidetidebolt
   ```
+  
+  `ansible_ssh_host`: 目標主機 ip
+  `ansible_port`: 目標主機 ssh port
+  `ansible_user`: 目標主機 ssh username
+  `ansible_password`: 目標主機 ssh user password
+  `ansible_sudo_pass`: 目標主機 sudo password
+  
+  如果是使用 ssh key 連線，這邊可以修改 `ansible_ssh_host`、`ansible_user` 就好
+  可以將 ssh key 添加，進 ssh config 來使 ansible 做 ssh 連線時使用該 ssh key
+  
+  `~/.ssh/config`
+  ```
+  Host 34.221.231.26, 34.219.166.100
+    IdentityFile ~/Downloads/Howinvest.Oregano.pem
+  ```
 
 - `vars` 相關設定變數
 
