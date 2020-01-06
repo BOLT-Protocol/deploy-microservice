@@ -65,8 +65,8 @@ agent_user: ubuntu
 bolt_main_ip: 192.168.2.20                   # 記得修改
 bolt_microservice_ip: 192.168.2.62           # 記得修改
 howinvest_microservice_ip: 192.168.2.21      # 記得修改
-web3Url: "ws://3.82.172.25:8546"             # 記得修改
-privateKey: '9a13ccb9897d8bb75d18d1b763ce66b2467a942e4512f338aab048096aac0202' # 測試鏈錢包 privateKey 記得修改
+web3Url: ""                                  # 記得修改
+privateKey: ''                               # 測試鏈錢包 privateKey 記得修改
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"
