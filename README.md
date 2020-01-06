@@ -35,9 +35,13 @@ $ cp YOURPATH/id_rsa deploy-microservice/keys/
   ```
   
   `ansible_ssh_host`: 目標主機 ip
+  
   `ansible_port`: 目標主機 ssh port
+  
   `ansible_user`: 目標主機 ssh username
+  
   `ansible_password`: 目標主機 ssh user password
+  
   `ansible_sudo_pass`: 目標主機 sudo password
   
   如果是使用 ssh key 連線，這邊可以修改 `ansible_ssh_host`、`ansible_user` 就好
