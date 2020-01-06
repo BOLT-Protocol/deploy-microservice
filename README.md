@@ -6,7 +6,7 @@
 
 **所有要部署的agent機器需已安裝 Python@2.7.15, python-apt 跟 SSH**
 
-本腳本使用 Ansible 撰寫，因此需要先行安裝 Ansible@2.8.1
+本腳本使用 Ansible 撰寫，因此需要先行安裝 **Ansible@2.8.1**
 
 ## 部署步驟
 
