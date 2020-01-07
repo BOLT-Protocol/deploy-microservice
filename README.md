@@ -75,7 +75,7 @@ bolt_main_ip: 192.168.2.20                   # 記得修改
 bolt_microservice_ip: 192.168.2.62           # 記得修改
 howinvest_microservice_ip: 192.168.2.21      # 記得修改
 web3Url: ""                                  # 記得修改
-privateKey: ''                               # 測試鏈錢包 privateKey 記得修改
+privateKey: ''                               # 測試鏈錢包 privateKey 記得修改(ex: b0d8d7ce4cf809fc5cfc625c8f1bf8d055f31524e06a6d3945d46830c4bcba97)
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"
