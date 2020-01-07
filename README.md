@@ -6,7 +6,14 @@
 
 **所有要部署的agent機器需已安裝 Python@2.7.15, python-apt 跟 SSH**
 
-本腳本使用 Ansible 撰寫，因此需要先行安裝 **Ansible@2.8.1**
+本腳本使用 Ansible 撰寫，因此需要先行安裝 **Ansible@2.8.1**(太新版會有問題)
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install python-pip 
+pip install -Iv ansible==2.8.1
+```
 
 ## 部署步驟
 
@@ -17,6 +24,8 @@
 ```
 $ cp YOURPATH/id_rsa deploy-microservice/keys/
 ```
+
+![產生 github ssh key 到 github 設定](http://wiki.csie.ncku.edu.tw/github)
 
 ### Step 2
 
@@ -96,7 +105,7 @@ $ ansible-playbook multi-playbook-step1.yml
 
 ### step 4
 
-手動部署合約
+step 4 手動部署合約 連線到 bolt_microservice 機器
 
 #### 安裝 Truffle
 
@@ -270,7 +279,7 @@ $ node testDeployBooster.js --assetAddress 0xeF37C171cF071bA540ea7589553C6551623
 
 接著拿著我們剛取得的 `Booster 合約地址` 到 `gringotts` 專案
 
-#### gringotts
+#### gringotts 也是再 bolt_microservice 機器
 
 ```
 $ cd gringotts
@@ -308,7 +317,7 @@ let env = {
   generateEmptyTx: true,
   ipfs: {
     peers: [],
-    repo: '/home/vagrant/ipfs'           // ipfs 位置，修改成自己的家目錄
+    repo: ''           // ipfs 位置，修改成自己的家目錄 (ex: /home/tideops/ipfs)
   }
 };
 
@@ -348,7 +357,7 @@ gsn: 0
 
 修改完後可以繼續下面的自動化腳本設定
 
-### Step 4
+### Step 5
 
 執行 ansible 腳本 step 2
 
@@ -362,6 +371,8 @@ $ ansible-playbook multi-playbook-step2.yml
 
 - 到個機器下 `pm2 list`、`pm2 logs` 查看有無錯誤訊息
 - 進到 bolt_main 的 `BOLT-AUTOMATION` 底下執行 `npm test` 整合性測試，如果測試全過就代表部署成功
+
+pm2 指令如果沒有找到，可以使用 `/usr/local/lib/npm/bin/pm2`
 
 ## 如果只需要部署某一台
 
