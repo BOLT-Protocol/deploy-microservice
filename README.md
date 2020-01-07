@@ -25,7 +25,7 @@ pip install -Iv ansible==2.8.1
 $ cp YOURPATH/id_rsa deploy-microservice/keys/
 ```
 
-![產生 github ssh key 到 github 設定](http://wiki.csie.ncku.edu.tw/github)
+[產生 github ssh key 到 github 設定](http://wiki.csie.ncku.edu.tw/github)
 
 ### Step 2
 
