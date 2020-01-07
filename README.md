@@ -140,7 +140,7 @@ $ vim env.js
 let env = {
   devnet: {
     web3Url: '',  // 測試鏈位置  記得修改
-    privateKey: '', // 測試鏈錢包 privateKey 記得修改
+    privateKey: '', // 測試鏈錢包 privateKey 記得修改(ex: b0d8d7ce4cf809fc5cfc625c8f1bf8d055f31524e06a6d3945d46830c4bcba97)
   },
   testnet: {
     web3Url: '',
