@@ -74,7 +74,7 @@ agent_user: ubuntu
 bolt_main_ip: 192.168.2.20                   # 記得修改
 bolt_microservice_ip: 192.168.2.62           # 記得修改
 howinvest_microservice_ip: 192.168.2.21      # 記得修改
-web3Url: ""                                  # 記得修改
+web3Url: ""                                  # 記得修改 (ex: ws://3.82.172.25:8546)
 privateKey: ''                               # 測試鏈錢包 privateKey 記得修改(ex: b0d8d7ce4cf809fc5cfc625c8f1bf8d055f31524e06a6d3945d46830c4bcba97)
 
 authModulePassword: "P@ssw0rdHksNZX"
@@ -139,7 +139,7 @@ $ vim env.js
 ```javascript
 let env = {
   devnet: {
-    web3Url: '',  // 測試鏈位置  記得修改
+    web3Url: '',  // 測試鏈位置 記得修改(ex: http://3.82.172.25:8545)
     privateKey: '', // 測試鏈錢包 privateKey 記得修改(ex: b0d8d7ce4cf809fc5cfc625c8f1bf8d055f31524e06a6d3945d46830c4bcba97)
   },
   testnet: {
@@ -294,12 +294,12 @@ var argv = require('minimist')(process.argv.slice(2), { string: ['contractAddres
 var operators = require('sequelize').Op;
 
 let env = {
-  web3Url: '',                          // 測試鏈位置 記得修改
+  web3Url: '',                          // 測試鏈位置 記得修改 (ex: ws://3.82.172.25:8546)
   serverUrl: 'http://127.0.0.1:3001',
   serverAddress: '0xd0C9AB4388871c662e95BBD3286B00f2cEDD09CE',
   contractAddress: '',                  // 貼上剛剛拿到的 Booster 合約地址 記得修改
   boosterPort: '3000',
-  signerKey: '',                        // 測試鏈錢包 privateKey 記得修改
+  signerKey: '',                        // 測試鏈錢包 privateKey 記得修改 (ex: f0da8604c69db1c659b5a87bd0124088243ad215217a0e06ed5901de5c0162cd)
   btcKey:'934waTMCujKrTr3vWyL3EcoemM7y4wWNUKsEvZcrR4185VxQVUW',
   production: {
     username: 'howhow',                 // vars/all.yml 中設定的 postgresUser
