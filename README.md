@@ -377,3 +377,56 @@ pm2 指令如果沒有找到，可以使用 `/usr/local/lib/npm/bin/pm2`
 ## 如果只需要部署某一台
 
 一樣填好上面的 Step 1，然後註解掉 `multi-playbook.yml` 其他 hosts，然後執行 Step 2 即可
+
+## 重置成一個全新環境
+
+下面所有的 npm restart 下完指令後，有執行成功沒出任何錯誤訊息 ctrl+c 直接退出就好
+
+S2_BOLT-MicroService
+
+```
+$ pm2 stop all
+$ cd contracts
+部署新合約（請參考 https://github.com/BOLT-Protocol/deploy-microservice#contract）
+$ cd ../gringotts
+將合約地址貼到 env.js 後（請參考 https://github.com/BOLT-Protocol/deploy-microservice#gringotts-%E4%B9%9F%E6%98%AF%E5%86%8D-bolt_microservice-%E6%A9%9F%E5%99%A8）
+$ npm restart
+$ cd ../BOLT-CURRENCY
+$ npm restart
+$ cd ../BOLT-KEYCHAIN
+$ npm restart
+$ cd ../BOLT-KEYSTONE
+$ npm restart
+$ cd ../BOLT-TRUST
+$ npm restart
+$ pm2 restart all
+```
+
+S3_Howinvest-MicroServices
+
+```
+$ pm2 stop all
+$ cd HowInvest-AuthModule
+$ npm restart
+$ cd ../HowInvest-Blacklist
+$ npm restart
+$ cd ../HowInvest-TradeModule
+$ npm restart
+$ pm2 restart all
+```
+
+S1_BOLT-MAIN
+
+```
+$ pm2 stop all
+$ cd Howinvest-APIGateway
+$ npm restart
+$ pm2 restart all
+```
+
+## 自動 attach 腳本
+
+```
+(crontab -l 2>/dev/null; echo "0 */3 * * * node $HOME/gringotts/startAttach.js && node $HOME/gringotts/startFinalize.js > /dev/null 2>/tmp/cronlog.error") | crontab -
+service cron start
+```
