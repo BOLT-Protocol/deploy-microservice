@@ -1,0 +1,123 @@
+---
+- hosts: server
+  roles:
+    - { role: init-env, become: yes }
+  tasks:
+    - name: pull repo
+      ignore_errors: true
+      git:
+        repo: "{{ item.repo }}"
+        dest: "{{ item.name }}"
+        accept_hostkey: yes
+        version: develop
+      with_items:
+        - { repo: git@github.com:BOLT-Protocol/gringotts.git, name: gringotts }
+        - { repo: git@github.com:BOLT-Protocol/contracts.git, name: contracts }
+        - { repo: git@github.com:BOLT-Protocol/BOLT-KEYSTONE.git, name: BOLT-KEYSTONE }
+        - { repo: git@github.com:BOLT-Protocol/BOLT-KEYCHAIN.git, name: BOLT-KEYCHAIN }
+        - { repo: git@github.com:BOLT-Protocol/BOLT-TRUST.git, name: BOLT-TRUST }
+        - { repo: git@github.com:BOLT-Protocol/BOLT-CURRENCY.git, name: BOLT-CURRENCY }
+        - { repo: git@github.com:BOLT-Protocol/Howinvest-APIGateway.git, name: Howinvest-APIGateway }
+        - { repo: git@github.com:BOLT-Protocol/BOLT-AUTOMATION.git, name: BOLT-AUTOMATION }
+        - { repo: git@github.com:BOLT-Protocol/HowInvest-AuthModule.git, name: HowInvest-AuthModule }
+        - { repo: git@github.com:BOLT-Protocol/HowInvest-TradeModule.git, name: HowInvest-TradeModule }
+        - { repo: git@github.com:BOLT-Protocol/HowInvest-Blacklist.git, name: HowInvest-Blacklist }
+
+- hosts: server
+  name: set chain env
+  sudo: yes
+  tasks:
+    - name: add ethereum repo
+      apt_repository:
+        repo: ppa:ethereum/ethereum
+    - name: install ethereum
+      apt:
+        name: "{{ packages }}"
+  vars:
+    - packages:
+      - software-properties-common
+      - ethereum
+
+- hosts: server
+  name: init DB
+  become: True
+  tasks:
+    - name: Install PostgreSQL
+      apt: name={{ item }} update_cache=yes state=installed
+      with_items:
+        - postgresql
+        - python-psycopg2
+        - postgresql-contrib
+        - libpq-dev
+    - name: Create database
+      become: yes
+      become_user: postgres
+      postgresql_db:
+        name: "{{ item }}"
+      with_items:
+        - bolt
+        - trust
+    - name: Create database user
+      become: yes
+      become_user: postgres
+      vars:
+        ansible_ssh_pipelining: true
+      postgresql_user:
+        db: "{{ item }}"
+        name: howhow
+        password: DRFnNN67
+      with_items:
+        - bolt
+        - trust
+
+- hosts: server
+  name: generate contracts & gringotts env
+  vars_files: vars/all.yml
+  roles:
+    - { role: geerlingguy.nodejs, nodejs_install_npm_user: "{{ agent_user }}", become: yes }
+  tasks:
+    - name: Check if node already installed
+      command: node --version
+      ignore_errors: true
+      changed_when: false
+      register: node_is_installed
+    - name: install nvm
+      shell: >
+        curl https://raw.githubusercontent.com/creationix/nvm/v0.7.0/install.sh | sh
+        creates=.nvm/nvm.sh
+      when: node_is_installed.rc != 0
+    - name: install node and set version
+      shell: >
+        /bin/bash -c "source ~/.nvm/nvm.sh && nvm install v8.9.4 && nvm alias default v8.9.4"
+        creates=.nvm/alias
+      when: node_is_installed.rc != 0
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "contracts"
+        - "gringotts"
+        - "BOLT-KEYSTONE"
+        - "BOLT-KEYCHAIN"
+        - "BOLT-TRUST"
+        - "BOLT-CURRENCY"
+        - "HowinvestMockAPI"
+        - "HowInvest-ReceptionDesk"
+    - name: generation the contracts env
+      template:
+        src: env/contracts/env.js.j2
+        dest: contracts/env.js
+    - name: generation the gringotts env
+      template:
+        src: env/gringotts/env.js.j2
+        dest: gringotts/env.js
+
+- hosts: server
+  sudo: yes
+  vars_files: vars/all.yml
+  tasks:
+    - name: Change ~/.ssh, group and permissions
+      file:
+        path: "/home/{{ agent_user }}/.ssh"
+        owner: "{{ agent_user }}"
+        group: "{{ agent_user }}"

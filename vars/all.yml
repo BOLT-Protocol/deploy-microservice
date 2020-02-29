@@ -1,10 +1,10 @@
 # ssh 登入的 user name
-agent_user: tideops                     # 記得修改
-bolt_main_ip: 52.199.189.73             # 記得修改
-bolt_microservice_ip: 13.113.193.7      # 記得修改
-howinvest_microservice_ip: 3.112.250.9  # 記得修改
+agent_user: vagrant                     # 記得修改
+bolt_main_ip: 192.168.50.4             # 記得修改
+bolt_microservice_ip: 192.168.50.5      # 記得修改
+howinvest_microservice_ip: 192.168.50.6  # 記得修改
 web3Url: ''                             # 記得修改
-privateKey: ''                          # 測試鏈錢包 privateKey 記得修改(ex: b0d8d7ce4cf809fc5cfc625c8f1bf8d055f31524e06a6d3945d46830c4bcba97)
+privateKey: ''                          # 測試鏈錢包 privateKey 記得修改(ex: f0da8604c69db1c659b5a87bd0124088243ad215217a0e06ed5901de5c0162cd，去掉 0x)
 
 authModulePassword: "P@ssw0rdHksNZX"
 opAccountPassword: "P@ssw0rdHksNZX"

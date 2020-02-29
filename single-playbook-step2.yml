@@ -1,14 +1,15 @@
-- hosts: bolt_microservice
-  name: start all bolt_microservice
+---
+- hosts: server
+  name: start BOLT service
   vars_files: vars/all.yml
   tasks:
-    - name: migrate gringotts
-      shell: NODE_ENV=production ./node_modules/.bin/sequelize db:migrate --config env.js --migrations-path ./storage-manager/migrations --models-path ./storage-manager/models
+    - name: start gringotts
+      shell: rm -rf ./chaindata/level ./chaindata/rocksdb ./db; /usr/local/lib/npm/bin/pm2 start server.js -n gringotts
       ignore_errors: true
       args:
         chdir: "gringotts"
-    - name: start gringotts
-      shell: rm -rf ./chaindata/level ./chaindata/rocksdb ./db; /usr/local/lib/npm/bin/pm2 start server.js -n gringotts
+    - name: migrate gringotts & start migrate
+      shell: NODE_ENV=production ./node_modules/.bin/sequelize db:migrate --config env.js --migrations-path ./storage-manager/migrations --models-path ./storage-manager/models
       ignore_errors: true
       args:
         chdir: "gringotts"
@@ -53,11 +54,39 @@
       ignore_errors: true
       args:
         chdir: "BOLT-TRUST"
-  environment:
-    - LC_CTYPE: en_US.UTF-8
-    - LC_ALL: en_US.UTF-8
 
-- hosts: bolt_microservice
+- hosts: server
+  name: set microservice env and start service
+  vars_files: vars/all.yml
+  tasks:
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "Howinvest-APIGateway"
+        - "BOLT-AUTOMATION"
+    - name: cp env file & deploy script
+      copy:
+        src: "./env/Howinvest-APIGateway/private"
+        dest: "Howinvest-APIGateway"
+    - name: generation the BOLT-AUTOMATION env
+      template:
+        src: env/BOLT-AUTOMATION/env.js.j2
+        dest: BOLT-AUTOMATION/config/env.js
+    - name: generation the HowinvestMockAPI config
+      template:
+        src: env/Howinvest-APIGateway/private/config.toml.j2
+        dest: Howinvest-APIGateway/private/config.toml
+    - name: set cap can net bind service
+      become: yes
+      command: setcap cap_net_bind_service=+ep /usr/bin/node
+    - name: start Howinvest-APIGateway
+      command: /usr/local/lib/npm/bin/pm2 start . -n Howinvest-APIGateway
+      ignore_errors: true
+      args:
+        chdir: "Howinvest-APIGateway"
+
+- hosts: server
   name: register all service user
   vars_files: vars/all.yml
   tasks:
@@ -100,35 +129,17 @@
         return_content: yes
       register: registerFundManagement
 
-- hosts: bolt_main
+- hosts: server
   name: set microservice env and start service
   vars_files: vars/all.yml
   tasks:
-    - name: cp env file & deploy script
-      copy:
-        src: "./env/Howinvest-APIGateway/private"
-        dest: "Howinvest-APIGateway"
-    - name: generation the BOLT-AUTOMATION env
-      template:
-        src: env/BOLT-AUTOMATION/env.js.j2
-        dest: BOLT-AUTOMATION/config/env.js
-    - name: generation the HowinvestMockAPI config
-      template:
-        src: env/Howinvest-APIGateway/private/config.toml.j2
-        dest: Howinvest-APIGateway/private/config.toml
-    - name: set cap can net bind service
-      become: yes
-      command: setcap cap_net_bind_service=+ep /usr/bin/node
-    - name: start Howinvest-APIGateway
-      command: /usr/local/lib/npm/bin/pm2 start . -n Howinvest-APIGateway
-      ignore_errors: true
-      args:
-        chdir: "Howinvest-APIGateway"
-
-- hosts: howinvest_microservice
-  name: set microservice env and start service
-  vars_files: vars/all.yml
-  tasks:
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "HowInvest-AuthModule"
+        - "HowInvest-TradeModule"
+        - "HowInvest-Blacklist"
     - name: cp env file
       copy:
         src: "./env/HowInvest-AuthModule/private"
@@ -155,8 +166,8 @@
         dest: HowInvest-Blacklist/private/config.toml
     - name: set AuthModule config
       shell: 
-        sed -i "s#fundManagementAddress#{{ hostvars['bolt_microservice']['registerFundManagement'].json.profile.address }}#g" HowInvest-AuthModule/private/config.toml;
-        sed -i "s#receptionDeskAddress#{{ hostvars['bolt_microservice']['registerReceptionDesk'].json.profile.address }}#g" HowInvest-AuthModule/private/config.toml;
+        sed -i "s#fundManagementAddress#{{ hostvars['server']['registerFundManagement'].json.profile.address }}#g" HowInvest-AuthModule/private/config.toml;
+        sed -i "s#receptionDeskAddress#{{ hostvars['server']['registerReceptionDesk'].json.profile.address }}#g" HowInvest-AuthModule/private/config.toml;
       ignore_errors: true
     - name: start HowInvest-AuthModule
       command: /usr/local/lib/npm/bin/pm2 start . -n HowInvest-AuthModule
@@ -173,8 +184,11 @@
       ignore_errors: true
       args:
         chdir: "HowInvest-Blacklist"
-
-- hosts: multi
+  environment:
+    - LC_CTYPE: en_US.UTF-8
+    - LC_ALL: en_US.UTF-8
+  
+- hosts: server
   sudo: yes
   vars_files: vars/all.yml
   tasks:

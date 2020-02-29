@@ -16,7 +16,7 @@ npm_config_unsafe_perm: "false"
 # Define a list of global packages to be installed with NPM.
 nodejs_npm_global_packages: 
   - name: truffle
-    version: 5.1.1
+    version: 5.1.6
   - name: pm2
 
 #  # Install a specific version of a package.

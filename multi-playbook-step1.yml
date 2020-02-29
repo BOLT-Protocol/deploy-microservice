@@ -4,7 +4,7 @@
   vars_files: vars/all.yml
   roles:
     - { role: init-env, user: "{{ agent_user }}" }
-    - { role: geerlingguy.nodejs, nodejs_install_npm_user: "{{ agent_user }}" }
+    - { role: geerlingguy.nodejs, nodejs_install_npm_user: "{{ agent_user }}", become: yes  }
   tasks:
     - name: Check if node already installed
       command: node --version
@@ -47,7 +47,6 @@
         accept_hostkey: yes
         version: develop
       with_items:
-        # - { repo: git@github.com:VagrantPi/privateChain.git, name: privateChain }
         - { repo: git@github.com:BOLT-Protocol/gringotts.git, name: gringotts }
         - { repo: git@github.com:BOLT-Protocol/contracts.git, name: contracts }
     - name: pull repo
@@ -79,7 +78,7 @@
         - { repo: git@github.com:BOLT-Protocol/HowInvest-Blacklist.git, name: HowInvest-Blacklist }
 
 - hosts: bolt_microservice
-  name: set chain
+  name: set chain env
   sudo: yes
   tasks:
     - name: add ethereum repo
@@ -92,24 +91,6 @@
     - packages:
       - software-properties-common
       - ethereum
-
-# - hosts: bolt_microservice
-#   name: start chain
-#   vars_files: vars/all.yml
-#   tasks:
-#     - name: reset config
-#       shell:
-#         sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/reset.sh;
-#         sed -i "s#/home/vagrant#{{ home_path }}#g" privateChain/start.sh;
-#       ignore_errors: true
-#     - name: reset privateChain
-#       command: sh reset.sh
-#       args:
-#         chdir: privateChain/
-#     - name: start privateChain
-#       shell: "(cd privateChain/; nohup sh start.sh >/dev/null 2>&1 &)"
-#   vars:
-#     - home_path: "/home/{{ agent_user }}"
 
 - hosts: bolt_microservice
   name: init DB
@@ -144,6 +125,58 @@
       with_items:
         - bolt
         - trust
+
+- hosts: bolt_microservice
+  name: start all bolt_microservice
+  vars_files: vars/all.yml
+  tasks:
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "contracts"
+        - "gringotts"
+        - "BOLT-KEYSTONE"
+        - "BOLT-KEYCHAIN"
+        - "BOLT-TRUST"
+        - "BOLT-CURRENCY"
+
+- hosts: bolt_main
+  name: set microservice env and start service
+  vars_files: vars/all.yml
+  tasks:
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "Howinvest-APIGateway"
+        - "BOLT-AUTOMATION"
+
+- hosts: howinvest_microservice
+  name: set microservice env and start service
+  vars_files: vars/all.yml
+  tasks:
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ item }}"
+      with_items:
+        - "HowInvest-AuthModule"
+        - "HowInvest-TradeModule"
+        - "HowInvest-Blacklist"
+
+- hosts: bolt_microservice
+  name: generate contracts & gringotts env
+  vars_files: vars/all.yml
+  tasks:
+    - name: generation the contracts env
+      template:
+        src: env/contracts/env.js.j2
+        dest: contracts/env.js
+    - name: generation the gringotts env
+      template:
+        src: env/gringotts/env.js.j2
+        dest: gringotts/env.js
+
         
 - hosts: multi
   sudo: yes

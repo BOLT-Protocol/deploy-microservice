@@ -41,5 +41,6 @@ Vagrant.configure("2") do |config|
   #   server_config.vm.network "forwarded_port", guest: 5669, host: 5669
   #   server_config.vm.network "forwarded_port", guest: 5668, host: 5668
   #   server_config.vm.network "forwarded_port", guest: 80, host: 80
+  #   server_config.vm.network "private_network", ip: "192.168.50.7"
   # end
 end
