@@ -72,6 +72,10 @@ ssh_known_hosts_command: "ssh-keyscan -H -T 10"
 ssh_known_hosts: github.com
 ```
 
+- ./roles/init-env/default/main.yml
+
+user: {{ agent_user }}
+
 ### Step 3
 
 執行 ansible 腳本 step 1
